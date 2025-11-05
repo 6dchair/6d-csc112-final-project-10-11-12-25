@@ -1,0 +1,36 @@
+   int     x;     
+a = 7 ;
+                     x       =     8;    
+   int y = 255, w = 128, z = -42;
+x = b + 7 ;
+x = x + 7 - 78;
+c = 78 * g;
+int = 20;
+int int = 23;
+int d = 12k3;
+int _xx = 13;
+int c = 8   + 5 * 6 /3;
+int d = 3*5*(6+1)/2;
+x = c + d - 16;
+c = 8  + (3 + 5) / (1+1);
+int l, m, n, o;
+x = (x + c);
+x = 3, a = 2, b = 3;
+int x = 9;
+int g = 5, h = g * 6 + 1, k;
+int l = 100;
+l = g * 2 + (h / 12) - 2 * 18;
+x = (24*23) / 12 + 12 - 11 /3 - (2 + 3) * 56 / 8 + (43-8) / 2;
+x = 2 * ((2+3) / 5) + 45 / ((23 + 2) * (56*2)) - 90;
+x = (2+3) (6-5);
+
+
+int aloha, bee = 2, csd = 3;
+    int dasd = 1, easd = 2, fasd = 3, gasd = 4, hasd = 5, iasd = 6, jasd = 7, kasd = 8;
+    int lasd = 9, masd = 10, nasd = 11, oasd = 12, pasd = 13, qasd = 14, rasd = 15, sasd = 16;
+    int tasd = 17, uasd = 18, vasd = 19, wasd = 20, xasd = 21, yasd = 22;
+
+    aloha = (bee + csd) + (dasd + easd) + (fasd + gasd) + (hasd + iasd) * (jasd + kasd) / (lasd + masd) + (nasd + oasd) + (pasd + qasd) * (rasd + sasd) * (tasd + uasd) / (vasd + wasd) / (xasd + yasd);
+
+
+   int gd = 1;
