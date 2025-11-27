@@ -19,4 +19,6 @@ _For more details about the C source and header files and what they do, please r
 *Note:* This compiler currently supports only *variable declaration*, *assignment*, and *basic arithmetic operations*, following *C syntax*.
 
 # PART 2: Custom language using Lex & Yacc 
-_WIP_
+_Work in progress_ 
+
+*Tentative language name: **p.0** (read as "p-zero") - Prototype 0*
