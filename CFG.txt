@@ -1,48 +1,74 @@
 Content: Custom Programming Language CFG & Sample Code Using the Language
 Language name: p.0 (read as "P-zero") - Prototype Zero
 
+A. CFG
+
 (1) Nonterminals
-        { PROGRAM, DECLS, DECL, TYPE, VARLIST, STMTS, STMT, SIMPLE_STMT
-        ASSIGN, EXPR, TERM, FACTOR, PRINT, PRINT_PARTS, PRINT_PART }
-(2) Terminals
-	      { "int",  "p",  "=",  "+",  "-",  "*",  "/",  "(",  ")",  ",",  ":",  ">>>",  "<<<" }
+		{ PROGRAM, 
+		LINES, LINE, FULL_LINE, 
+		DECL, PRINT, ASSIGN, 
+		DECL_ITEMS, MORE_DECL_ITEMS, DECL_ITEM, 
+		MORE_ASSIGN, 
+		PRINT_PARTS, MORE_PRINT_PARTS, PRINT_PART, 
+		EXPR, TERM, FACTOR }
+(2) Terminals & Keywords
+		Terminals: { "=", "+", "-", "*", "/", "(", ")", ",", ":", ">>>", "<<" }
+		Keywords: { "int", "p" }  // Handled by lexer as separate token types:KW_INT,
+		//  KW_PRINT
 (3) Token classes:
-        ID: letter (letter | digit | "_")*
-        NUM: digit+
-        STR:  ' " ' (letter | digit | symbol | ESCAPE)* ' " ' (where symbol = printable ASCII except ")
-        ESCAPE: '\' ( 'n' | 't' | ' " ' | '\' )
+		ID: letter (letter | digit | "_")*
+		NUM: digit+
+		STR: " (letter | digit | symbol | ESCAPE)* "  (where symbol = printable ASCII except ")
+		ESCAPE: '\' ( 'n' | 't' | ' "' | '\' )
+		NEWLINE: "\n"
+		WHITESPACE: [ \t\r\f]+    // Ignored by lexer
+		COMMENT: "//" ~NEWLINE*   // Ignored by lexer
 (3) Start symbol: PROGRAM
 (4) Production rules:
-        PROGRAM -> ">>>" DECLS STMTS "<<<"
-        DECLS -> DECL DECLS ∣ ε
-        DECL -> TYPE VARLIST
-        TYPE -> "int"
-        VARLIST -> VAR_INIT | VAR_INIT "," VARLIST
-        VAR_INIT -> ID | ID "=" EXPR	// optional initialization
-        STMTS -> STMT STMTS ∣ STMT
-        STMT -> ASSIGN ∣ PRINT ∣ DECL ∣ SIMPLE_STMT
-        SIMPLE_STMT -> STMT | STMT "," STMT
-        ASSIGN -> ID "=" EXPR
-        EXPR -> EXPR "+" TERM ∣ EXPR "-" TERM | TERM
-        TERM -> TERM "*" FACTOR ∣ TERM "/" FACTOR | FACTOR
-        FACTOR -> NUM ∣ ID ∣ "(" EXPR ")"
-        PRINT -> "p" ":" PRINT_PARTS
-        PRINT_PARTS -> PRINT_PART ∣ PRINT_PART "," PRINT_PARTS
-        PRINT_PART -> STR ∣ ID
 
-*** Note: 
-      	//, \n, \t, \", & whitespaces will be handled by the lexer
+		// PROGRAM structure
+		PROGRAM ->   ">>>"   LINES   "<<<"
+		
+		// STATEMENTS and line structure
+		LINES ->   LINE   LINES   |   ε
+		LINE ->   FULL_LINE   NEWLINE   |   NEWLINE   |   COMMENT   NEWLINE
+		FULL_LINE ->   DECL   |   PRINT  | ASSIGN
+		
+		// Declaration rules
+		DECL ->   KW_INT    DECL_ITEMS
+		DECL_ITEMS ->   DECL_ITEM   MORE_DECL_ITEMS
+		MORE_DECL_ITEMS ->   "," DECL_ITEM   MORE_DECL_ITEMS   |   ε
+		DECL_ITEM ->   ID  |   ID "=" EXPR 
+		
+		// Assignment
+		ASSIGN ->   ID "=" EXPR   MORE_ASSIGN
+		MORE_ASSIGN -> ","   ASSIGN   |   ε
+		
+		// Print rules
+		PRINT ->   KW_PRINT    ":"    PRINT_PARTS
+		PRINT_PARTS ->   PRINT_PART MORE_PRINT_PARTS
+		MORE_PRINT_PARTS ->   "," PRINT_PART MORE_PRINT_PARTS | ε
+		
+		// Print parts: a string literal or an expression
+		PRINT_PART ->   STR | EXPR
+		
+		// Expression grammar (fully standard, left associative)
+		EXPR ->   EXPR + TERM   | EXPR - TERM   | TERM
+		TERM ->   TERM * FACTOR   |   TERM / FACTOR    | FACTOR
+		FACTOR ->   NUM | ID | "(" EXPR ")"
 
-Sample code using p.0:
+	* Note: 
+			// (for comments), \n, \t, \", & whitespaces will be handled by the lexer
 
-      >>>	// start
-      
-      int x = 2, y 
-      y = 3, int sum = x + y 
-      
-      p: x 				// prints the int value of x which is 2
-      p: "x: ", x, "y: ",  y 
-      p: "sum of x and y: ", sum
-      
-      >>>	// end 
 
+B. Sample Code Using p.0:
+
+>>>		// start
+
+    int a, b, c											// declaration line must start with "int", no other "int"’s shall occur
+    p: "Prototype 0 is cool!\n"							// prints a literal  string
+    a = 1, b = 90, c = a + b							// assignment line is for assignments only
+    int d = -3, e = 8									// implicit declaration with simultaneous assignment is allowed
+    p: "sum of all = ", a + b + c + d + e, "a = ", a	// printing compound statements
+
+>>>		// end
